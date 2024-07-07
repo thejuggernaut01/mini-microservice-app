@@ -18,6 +18,7 @@ const handleEvent = (type, data) => {
     const { id, title } = data;
 
     posts[id] = { id, title, comments: [] };
+    return;
   }
 
   if (type === "CommentCreated") {
@@ -25,6 +26,7 @@ const handleEvent = (type, data) => {
 
     const post = posts[postId];
     post.comments.push({ id, content, status });
+    return;
   }
 
   if (type === "CommentUpdated") {
@@ -35,6 +37,7 @@ const handleEvent = (type, data) => {
 
     comment.status = status;
     comment.content = content;
+    return;
   }
 };
 

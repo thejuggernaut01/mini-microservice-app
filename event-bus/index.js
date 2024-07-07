@@ -11,9 +11,12 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 const events = [];
 
+app.get("/events", (req, res) => {
+  res.send(events);
+});
+
 app.post("/events", async (req, res) => {
-  // we assume whatever comes along in the request body
-  // is our event
+  // we assume whatever comes along in the request body is our event
   const event = req.body;
 
   events.push(event);

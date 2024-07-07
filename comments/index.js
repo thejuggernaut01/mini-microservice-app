@@ -48,20 +48,41 @@ app.post("/events", async (req, res) => {
   if (type === "CommentModerated") {
     const { postId, id, status, content } = data;
 
-    const comments = commentsByPostId[postId];
-    const comment = comments.find((comment) => comment.id === id);
+    try {
+      await axios.post("http://localhost:4005/events", {
+        type: "CommentUpdated",
+        data: {
+          id,
+          status,
+          postId,
+          content,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
-    comment.status = status;
+    // console.log("PostId", postId);
+    // console.log("comments", commentsByPostId);
+    // const comments = commentsByPostId[postId];
+    // console.log(comments);
+    // const comment = comments?.find((comment) => comment.id === id);
 
-    await axios.post("http://localhost:4005", {
-      type: "CommentUpdated",
-      data: {
-        id,
-        status,
-        postId,
-        content,
-      },
-    });
+    // if (comment) {
+    //   comment.status = status;
+
+    //   await axios.post("http://localhost:4005", {
+    //     type: "CommentUpdated",
+    //     data: {
+    //       id,
+    //       status,
+    //       postId,
+    //       content,
+    //     },
+    //   });
+    // } else {
+    //   console.log(`Comment with id ${id} not found.`);
+    // }
   }
 
   res.send({});
