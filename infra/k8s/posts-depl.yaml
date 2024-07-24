@@ -1,17 +1,38 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1 # Specifies the API version used managing applications. apps/v1 is the most commonly used version for managing applications.
+
+kind: Deployment # Indicates the type of Kubernetes resource being defined. In this case, it's a Deployment, which manages a set of identical pods to ensure the specified number of replicas are running.
+
+metadata: # Contains metadata about the deployment, such as its name, labels, and annotations.
+  name: posts-depl # Specifies the name of the deployment.
+
+spec: # Defines the desired state of the deployment
+  replicas: 1 # Specifies the number of pod replicas that should be running at any given time
+
+  selector: # Defines how the deployment will select which pods it manages. The selector is used to match pods based on their labels.
+    matchLabels: # Specifies the key-value pairs that must match the pod's labels for the deployment to manage those pods.
+      app: posts # The deployment will manage any pod with the label app: posts.
+
+  template: # Defines the template used to create new pods
+    metadata: # Contains metadata for the pods created by the deployment, such as labels and annotations.
+      labels: # Specifies the labels to apply to the pods created by this deployment.
+        app: posts # Applies the label app: posts to the pods created by this deployment, ensuring they match the selector criteria.
+
+    spec: # Defines the pod specification, including the containers that will run in the pod, volumes, and other pod-level settings.
+      containers: # Lists the containers that will run in each pod created by this deployment.
+        - name: posts # Specifies the name of the container within the pod. In this case, the container is named posts.
+
+          image: aythejuggernaut/posts # Specifies the Docker image to use for the container. Kubernetes will pull this image from Docker Hub unless a different registry is specified.
+
+---
+apiVersion: v1
+kind: Service
 metadata:
-  name: posts-depl
+  name: posts-clusterip-srv
 spec:
-  replicas: 1
   selector:
-    matchLabels:
-      app: posts
-  template:
-    metadata:
-      labels:
-        app: posts
-    spec:
-      containers:
-        - name: posts
-          image: aythejuggernaut/posts
+    app: posts
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
