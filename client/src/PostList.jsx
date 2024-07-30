@@ -8,7 +8,7 @@ const PostList = () => {
 
   const fetchPosts = async () => {
     // fetch data from query service
-    const res = await axios.get("http://localhost:4002/events");
+    const res = await axios.get("http://posts.com/events");
 
     setPosts(res.data);
   };
